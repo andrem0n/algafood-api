@@ -2,6 +2,7 @@ package com.algaworks.algafoodapi.jpa;
 
 import com.algaworks.algafoodapi.AlgafoodApiApplication;
 import com.algaworks.algafoodapi.domain.model.Cozinha;
+import com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import java.util.List;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -14,9 +15,9 @@ public class Main {
         .web(WebApplicationType.NONE)
         .run(args);
 
-    CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+    CozinhaRepository cozinhas = applicationContext.getBean(CozinhaRepository.class);
 
-    List<Cozinha> lista = cadastroCozinha.listar();
+    List<Cozinha> lista = cozinhas.todas();
     System.out.println("printando todas as cozinhas");
     lista.stream().forEach(System.out::println);
 
@@ -24,17 +25,17 @@ public class Main {
     Cozinha cozinha2 = new Cozinha("brasileira");
 
     System.out.println("\nprintando cozinhas recentemente salvas");
-    System.out.println(cadastroCozinha.salvar(cozinha1));
-    System.out.println(cadastroCozinha.salvar(cozinha2));
+    System.out.println(cozinhas.adicionar(cozinha1));
+    System.out.println(cozinhas.adicionar(cozinha2));
 
     System.out.println("\nbuscando cozinha pelo id");
-    System.out.println(cadastroCozinha.buscarPorId(2l));
+    System.out.println(cozinhas.porId(2l));
 
     cozinha1.setId(1l);
     System.out.println("\nFazendo update de uma cozinha");
-    System.out.println(cadastroCozinha.salvar(cozinha1));
+    System.out.println(cozinhas.adicionar(cozinha1));
 
     System.out.println("\nremovendo uma cozinha");
-    cadastroCozinha.remover(cozinha1);
+    cozinhas.remover(cozinha1);
   }
 }
