@@ -36,6 +36,6 @@ public class CozinhaMain {
     System.out.println(cozinhas.adicionar(cozinha1));
 
     System.out.println("\nremovendo uma cozinha");
-    cozinhas.remover(cozinha1);
+    //cozinhas.remover(cozinha1);
   }
 }

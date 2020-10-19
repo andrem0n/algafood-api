@@ -1,6 +1,5 @@
 package com.algaworks.algafoodapi.domain.model;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@NoArgsConstructor
 public class Cozinha {
 
   @EqualsAndHashCode.Include
