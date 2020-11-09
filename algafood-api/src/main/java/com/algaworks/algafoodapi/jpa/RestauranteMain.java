@@ -1,9 +1,7 @@
 package com.algaworks.algafoodapi.jpa;
 
 import com.algaworks.algafoodapi.AlgafoodApiApplication;
-import com.algaworks.algafoodapi.domain.model.Cozinha;
 import com.algaworks.algafoodapi.domain.model.Restaurante;
-import com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,15 +26,15 @@ public class RestauranteMain {
     Restaurante restaurante2 = new Restaurante("Jeronimo's", new BigDecimal(10.00));
 
     System.out.println("\nprintando restaurantes recentemente salvos");
-    System.out.println(restaurantes.adicionar(restaurante1));
-    System.out.println(restaurantes.adicionar(restaurante2));
+    System.out.println(restaurantes.salvar(restaurante1));
+    System.out.println(restaurantes.salvar(restaurante2));
 
     System.out.println("\nbuscando restaurante pelo id");
     System.out.println(restaurantes.porId(2l));
 
     restaurante1.setId(1l);
     System.out.println("\nFazendo update de um restaurante");
-    System.out.println(restaurantes.adicionar(restaurante1));
+    System.out.println(restaurantes.salvar(restaurante1));
 
     System.out.println("\nremovendo um restaurante");
     restaurantes.remover(restaurante1);
