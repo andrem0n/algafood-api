@@ -64,6 +64,6 @@ public class RestauranteController {
         } catch (EntidadeNaoEncontradaException entidadeNaoEncontradaException) {
             return ResponseEntity.badRequest().body(entidadeNaoEncontradaException.getMessage());
         }
-
+//teste
     }
 }
