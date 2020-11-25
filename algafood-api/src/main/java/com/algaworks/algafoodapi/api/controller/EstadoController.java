@@ -2,6 +2,7 @@ package com.algaworks.algafoodapi.api.controller;
 
 import com.algaworks.algafoodapi.domain.model.Estado;
 import com.algaworks.algafoodapi.domain.repository.EstadoRepository;
+import com.algaworks.algafoodapi.domain.service.CadastroEstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +17,13 @@ public class EstadoController {
     @Autowired
     private EstadoRepository estadoRepository;
 
+    @Autowired
+    private CadastroEstadoService cadastroEstadoService;
+
     @GetMapping
-    public List<Estado> listar(){
+    public List<Estado> listar() {
         return estadoRepository.todos();
     }
+
+
 }
