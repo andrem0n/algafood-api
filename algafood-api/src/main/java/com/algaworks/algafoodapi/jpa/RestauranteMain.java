@@ -37,6 +37,6 @@ public class RestauranteMain {
     System.out.println(restaurantes.salvar(restaurante1));
 
     System.out.println("\nremovendo um restaurante");
-    restaurantes.remover(restaurante1);
+    restaurantes.remover(1l);
   }
 }
