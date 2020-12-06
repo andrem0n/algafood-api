@@ -15,27 +15,27 @@ public class CozinhaMain {
         .web(WebApplicationType.NONE)
         .run(args);
 
-    CozinhaRepository cozinhas = applicationContext.getBean(CozinhaRepository.class);
-
-    List<Cozinha> lista = cozinhas.todas();
-    System.out.println("printando todas as cozinhas");
-    lista.stream().forEach(System.out::println);
-
-    Cozinha cozinha1 = new Cozinha("japonesa");
-    Cozinha cozinha2 = new Cozinha("brasileira");
-
-    System.out.println("\nprintando cozinhas recentemente salvas");
-    System.out.println(cozinhas.salvar(cozinha1));
-    System.out.println(cozinhas.salvar(cozinha2));
-
-    System.out.println("\nbuscando cozinha pelo id");
-    System.out.println(cozinhas.porId(2l));
-
-    cozinha1.setId(1l);
-    System.out.println("\nFazendo update de uma cozinha");
-    System.out.println(cozinhas.salvar(cozinha1));
-
-    System.out.println("\nremovendo uma cozinha");
+//    CozinhaRepository cozinhas = applicationContext.getBean(CozinhaRepository.class);
+//
+//    List<Cozinha> lista = cozinhas.todas();
+//    System.out.println("printando todas as cozinhas");
+//    lista.stream().forEach(System.out::println);
+//
+//    Cozinha cozinha1 = new Cozinha("japonesa");
+//    Cozinha cozinha2 = new Cozinha("brasileira");
+//
+//    System.out.println("\nprintando cozinhas recentemente salvas");
+//    System.out.println(cozinhas.salvar(cozinha1));
+//    System.out.println(cozinhas.salvar(cozinha2));
+//
+//    System.out.println("\nbuscando cozinha pelo id");
+//    System.out.println(cozinhas.porId(2l));
+//
+//    cozinha1.setId(1l);
+//    System.out.println("\nFazendo update de uma cozinha");
+//    System.out.println(cozinhas.salvar(cozinha1));
+//
+//    System.out.println("\nremovendo uma cozinha");
     //cozinhas.remover(cozinha1);
   }
 }
