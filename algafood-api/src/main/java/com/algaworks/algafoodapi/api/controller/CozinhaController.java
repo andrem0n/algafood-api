@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -67,6 +66,16 @@ public class CozinhaController {
         } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+    }
+
+    @GetMapping("/por-nome")
+    public List<Cozinha> cozinhasPorNome(String nome){
+        return cozinhaRepository.findTodasByNome(nome);
+    }
+
+    @GetMapping("/unica-por-nome")
+    public Optional<Cozinha> cozinhaUnicaPorNome(String nome){
+        return cozinhaRepository.findByNome(nome);
     }
 
 }
