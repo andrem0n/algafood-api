@@ -84,4 +84,10 @@ public class CozinhaController {
     return cozinhaRepository.findByNome(nome);
   }
 
+  @GetMapping("/existe-por-nome")
+  public boolean existsPorNome(String nome) {
+    return cozinhaRepository.existsByNome(nome);
+  }
+
+
 }
