@@ -8,6 +8,7 @@ import com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -125,6 +126,17 @@ public class RestauranteController {
       ReflectionUtils.setField(field, restauranteDestino, novoValor);
     });
     System.out.println(restauranteDestino);
+  }
 
+  @GetMapping("/por-taxa-frete")
+  public List<Restaurante> restaurantesPorTaxaFreteInicialFinal(BigDecimal taxaInicial,
+      BigDecimal taxaFinal) {
+    return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
+  }
+
+  @GetMapping("/por-nome-and-cozinhaId")
+  public Restaurante restaurantesPorNomeAndCozinhaId(String nome,
+      Long cozinhaId) {
+    return restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinhaId);
   }
 }
