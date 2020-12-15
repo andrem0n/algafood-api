@@ -137,7 +137,7 @@ public class RestauranteController {
   @GetMapping("/por-nome-and-cozinhaId")
   public Restaurante restaurantesPorNomeAndCozinhaId(String nome,
       Long cozinhaId) {
-    return restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinhaId);
+    return restauranteRepository.consultarPorNome(nome, cozinhaId);
   }
 
   @GetMapping("/por-nome")
