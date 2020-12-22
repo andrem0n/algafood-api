@@ -6,6 +6,7 @@ import com.algaworks.algafoodapi.domain.model.Estado;
 import com.algaworks.algafoodapi.domain.model.Restaurante;
 import com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroRestauranteService;
+import com.algaworks.algafoodapi.infrastructure.repository.RestauranteRepositoryImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -153,5 +154,11 @@ public class RestauranteController {
   @GetMapping("/count-por-cozinhas")
   public int countPorCozinha(Long id) {
     return restauranteRepository.countByCozinhaId(id);
+  }
+
+  @GetMapping("/porNome-and-taxa-frete")
+  public List<Restaurante> restaurantesPorNomeFrete(String nome, BigDecimal taxaInicial,
+      BigDecimal taxaFinal) {
+    return restauranteRepository.find(nome, taxaInicial, taxaFinal);
   }
 }
