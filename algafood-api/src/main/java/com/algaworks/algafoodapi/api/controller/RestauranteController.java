@@ -1,14 +1,14 @@
 package com.algaworks.algafoodapi.api.controller;
 
+import static com.algaworks.algafoodapi.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static com.algaworks.algafoodapi.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
+
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.model.Estado;
 import com.algaworks.algafoodapi.domain.model.Restaurante;
 import com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroRestauranteService;
-import com.algaworks.algafoodapi.infrastructure.repository.RestauranteRepositoryImpl;
-import com.algaworks.algafoodapi.infrastructure.repository.spec.RestauranteComFreteGratisSpec;
-import com.algaworks.algafoodapi.infrastructure.repository.spec.RestauranteComNomeSemelhanteSpec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -166,9 +166,6 @@ public class RestauranteController {
 
   @GetMapping("/com-frete-gratis")
   public List<Restaurante> restaurantesComFreteGratis(String nome) {
-    var comFreteGratis = new RestauranteComFreteGratisSpec();
-    var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
-
-    return restauranteRepository.findAll(comFreteGratis.and(comNomeSemelhante));
+    return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
   }
 }
