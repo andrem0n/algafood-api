@@ -1,5 +1,7 @@
 package com.algaworks.algafoodapi.domain.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,8 @@ import javax.persistence.Id;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -18,6 +22,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Cozinha {
 
   @EqualsAndHashCode.Include
@@ -27,6 +32,10 @@ public class Cozinha {
 
   @Column(nullable = false)
   private String nome;
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "cozinha")
+  private List<Restaurante> restaurantes = new ArrayList<>();
 
   public Cozinha(String nome) {
     this.nome = nome;
