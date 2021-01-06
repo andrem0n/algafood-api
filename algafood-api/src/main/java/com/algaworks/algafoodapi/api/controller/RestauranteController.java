@@ -1,8 +1,5 @@
 package com.algaworks.algafoodapi.api.controller;
 
-import static com.algaworks.algafoodapi.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
-import static com.algaworks.algafoodapi.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
-
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.model.Estado;
@@ -74,7 +71,7 @@ public class RestauranteController {
       Optional<Restaurante> restauranteSalvo = restauranteRepository.findById(id);
 
       if (restauranteSalvo.isPresent()) {
-        BeanUtils.copyProperties(restaurante, restauranteSalvo.get(), "id");
+        BeanUtils.copyProperties(restaurante, restauranteSalvo.get(), "id", "formasPagamento");
         Restaurante restauranteAtualizado = cadastroRestauranteService
             .salvar(restauranteSalvo.get());
         return ResponseEntity.ok(restauranteAtualizado);
