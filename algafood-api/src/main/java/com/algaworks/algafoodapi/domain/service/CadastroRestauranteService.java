@@ -2,16 +2,14 @@ package com.algaworks.algafoodapi.domain.service;
 
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import com.algaworks.algafoodapi.domain.model.Cozinha;
 import com.algaworks.algafoodapi.domain.model.Restaurante;
-import com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
-import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -52,19 +50,15 @@ public class CadastroRestauranteService {
         String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id)));
   }
 
-  public ResponseEntity<?> atualizar(Long id, Restaurante restaurante) {
-    try {
-      Optional<Restaurante> restauranteSalvo = restauranteRepository.findById(id);
+  public Object atualizar(Long id, Restaurante restaurante) {
+    Restaurante restauranteSalvo = buscarOuFalhar(id);
 
-      if (restauranteSalvo.isPresent()) {
-        BeanUtils.copyProperties(restaurante, restauranteSalvo.get(), "id", "formasPagamento",
-            "endereco", "dataCadastro");
-        Restaurante restauranteAtualizado = this.salvar(restauranteSalvo.get());
-        return ResponseEntity.ok(restauranteAtualizado);
-      }
-      return ResponseEntity.notFound().build();
+    BeanUtils.copyProperties(restaurante, restauranteSalvo, "id", "formasPagamento",
+        "endereco", "dataCadastro");
+    try {
+      return this.salvar(restauranteSalvo);
     } catch (EntidadeNaoEncontradaException entidadeNaoEncontradaException) {
-      return ResponseEntity.badRequest().body(entidadeNaoEncontradaException.getMessage());
+      throw new NegocioException(entidadeNaoEncontradaException.getMessage());
     }
   }
 }

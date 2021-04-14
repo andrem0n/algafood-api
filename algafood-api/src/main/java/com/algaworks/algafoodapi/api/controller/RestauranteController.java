@@ -57,7 +57,7 @@ public class RestauranteController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+  public Object atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
     return cadastroRestauranteService.atualizar(id, restaurante);
   }
 
@@ -68,17 +68,14 @@ public class RestauranteController {
   }
 
   @PatchMapping("/{id}")
-  public ResponseEntity<?> atualizarParcial(@PathVariable Long id,
+  public Object atualizarParcial(@PathVariable Long id,
       @RequestBody Map<String, Object> campos) {
 
-    Optional<Restaurante> restauranteSalvo = restauranteRepository.findById(id);
+    Restaurante restauranteSalvo = cadastroRestauranteService.buscarOuFalhar(id);
 
-    if (restauranteSalvo.isEmpty()) {
-      return ResponseEntity.notFound().build();
-    }
-    merge(campos, restauranteSalvo.get());
+    merge(campos, restauranteSalvo);
 
-    return atualizar(id, restauranteSalvo.get());
+    return atualizar(id, restauranteSalvo);
   }
 
   private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
