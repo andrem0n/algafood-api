@@ -1,2 +1,2 @@
 # algafood-api
-API que simula o funcionamento do ifood
+API que simula o funcionamento de aplicativos que entregam comida.
