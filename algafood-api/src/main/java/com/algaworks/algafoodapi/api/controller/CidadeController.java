@@ -1,6 +1,6 @@
 package com.algaworks.algafoodapi.api.controller;
 
-import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import com.algaworks.algafoodapi.domain.model.Cidade;
 import com.algaworks.algafoodapi.domain.repository.CidadeRepository;
@@ -10,7 +10,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,8 +41,12 @@ public class CidadeController {
   }
 
   @PostMapping
-  public ResponseEntity<Cidade> adicionar(@RequestBody Cidade cidade) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(cadastroCidade.salvar(cidade));
+  public Cidade adicionar(@RequestBody Cidade cidade) {
+    try {
+      return cadastroCidade.salvar(cidade);
+    } catch (EstadoNaoEncontradoException e) {
+      throw new NegocioException(e.getMessage());
+    }
   }
 
   @PutMapping("/{id}")
@@ -54,8 +57,8 @@ public class CidadeController {
 
     try {
       return cadastroCidade.salvar(cidadeSalva);
-    } catch (EntidadeNaoEncontradaException e) {
-      throw new NegocioException(e.getMessage());
+    } catch (EstadoNaoEncontradoException e) {
+      throw new NegocioException(e.getMessage(), e);
     }
   }
 
