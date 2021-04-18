@@ -3,6 +3,7 @@ package com.algaworks.algafoodapi.domain.service;
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
+import com.algaworks.algafoodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafoodapi.domain.model.Cozinha;
 import com.algaworks.algafoodapi.domain.model.Restaurante;
 import com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
@@ -40,14 +41,12 @@ public class CadastroRestauranteService {
       throw new EntidadeEmUsoException(
           String.format(MSG_RESTAURANTE_EM_USO, id));
     } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-      throw new EntidadeNaoEncontradaException(
-          String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id));
+      throw new RestauranteNaoEncontradoException(id);
     }
   }
 
   public Restaurante buscarOuFalhar(Long id) {
-    return restauranteRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(
-        String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id)));
+    return restauranteRepository.findById(id).orElseThrow(() -> new RestauranteNaoEncontradoException(id));
   }
 
   public Object atualizar(Long id, Restaurante restaurante) {

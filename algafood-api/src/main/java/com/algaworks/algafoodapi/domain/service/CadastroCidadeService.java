@@ -1,7 +1,7 @@
 package com.algaworks.algafoodapi.domain.service;
 
+import com.algaworks.algafoodapi.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.model.Cidade;
 import com.algaworks.algafoodapi.domain.model.Estado;
 import com.algaworks.algafoodapi.domain.repository.CidadeRepository;
@@ -39,13 +39,12 @@ public class CadastroCidadeService {
       throw new EntidadeEmUsoException(
           String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
     } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-      throw new EntidadeNaoEncontradaException(
-          String.format(MSG_CIDADE_EM_USO, id));
+      throw new CidadeNaoEncontradaException(id);
     }
   }
 
   public Cidade buscarOuFalhar(Long cidadeId) {
-    return cidadeRepository.findById(cidadeId).orElseThrow(() -> new EntidadeNaoEncontradaException(
-        String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId)));
+    return cidadeRepository.findById(cidadeId)
+        .orElseThrow(() -> new CidadeNaoEncontradaException(cidadeId));
   }
 }
