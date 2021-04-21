@@ -37,7 +37,7 @@ public class CadastroCidadeService {
       cidadeRepository.deleteById(id);
     } catch (DataIntegrityViolationException dataIntegrityViolationException) {
       throw new EntidadeEmUsoException(
-          String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
+          String.format(MSG_CIDADE_EM_USO, id));
     } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
       throw new CidadeNaoEncontradaException(id);
     }

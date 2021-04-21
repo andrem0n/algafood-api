@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CadastroRestauranteService {
 
-  public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe um cadastro de restaurente com o código %d";
   public static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser removido, pois está em uso";
 
   @Autowired
