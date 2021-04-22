@@ -4,54 +4,58 @@ import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import java.time.LocalDateTime;
+import java.util.Objects;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class ApiExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(EntidadeNaoEncontradaException.class)
   public ResponseEntity<?> tratarEntidadeNaoEncontradaException(
-      EntidadeNaoEncontradaException exception) {
-    Problema problema = Problema.builder()
-        .mensagem(exception.getMessage())
-        .dataHora(LocalDateTime.now())
-        .build();
+      EntidadeNaoEncontradaException exception, WebRequest webRequest) {
 
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+    return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(),
+        HttpStatus.NOT_FOUND, webRequest);
   }
 
   @ExceptionHandler(NegocioException.class)
-  public ResponseEntity<?> tratarNegocioException(NegocioException exception) {
-    Problema problema = Problema.builder()
-        .mensagem(exception.getMessage())
-        .dataHora(LocalDateTime.now()).build();
+  public ResponseEntity<?> tratarNegocioException(NegocioException exception,
+      WebRequest webRequest) {
 
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problema);
-  }
-
-  @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-  public ResponseEntity<?> tratarHttpMediaTypeNotSupportedException(
-      HttpMediaTypeNotSupportedException exception) {
-    Problema problema = Problema.builder()
-        .mensagem("O tipo de mídia não é aceito.")
-        .dataHora(LocalDateTime.now()).build();
-
-    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(problema);
+    return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(),
+        HttpStatus.BAD_REQUEST, webRequest);
   }
 
   @ExceptionHandler(EntidadeEmUsoException.class)
   public ResponseEntity<?> tratarEntidadeEmUsoException(
-      EntidadeEmUsoException exception) {
-    Problema problema = Problema.builder()
-        .mensagem(exception.getMessage())
-        .dataHora(LocalDateTime.now()).build();
+      EntidadeEmUsoException exception, WebRequest webRequest) {
 
-    return ResponseEntity.status(HttpStatus.CONFLICT).body(problema);
+    return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(),
+        HttpStatus.CONFLICT, webRequest);
   }
 
+  @Override
+  protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
+      HttpHeaders headers, HttpStatus status, WebRequest request) {
 
+    if (Objects.isNull(body)) {
+      body = Problema.builder()
+          .mensagem(status.getReasonPhrase())
+          .dataHora(LocalDateTime.now())
+          .build();
+    } else if (body instanceof String) {
+      body = Problema.builder()
+          .mensagem((String) body)
+          .dataHora(LocalDateTime.now())
+          .build();
+    }
+
+    return super.handleExceptionInternal(ex, body, headers, status, request);
+  }
 }
