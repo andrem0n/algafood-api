@@ -3,7 +3,10 @@ package com.algaworks.algafoodapi.api.exceptionhandler;
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -66,6 +69,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     if (rootCause instanceof InvalidFormatException) {
       return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status,
           request);
+    } else if (rootCause instanceof IgnoredPropertyException) {
+      return handleIgnoredPropertyException((IgnoredPropertyException) rootCause, headers, status,
+          request);
     }
 
     ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
@@ -76,11 +82,30 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, problem, headers, status, request);
   }
 
+  private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException rootCause,
+      HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+    ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+
+    String path = joinPath(rootCause.getPath());
+
+    String detail = String.format(
+        "A propriedade '%s' não existe. Corrija ou mude essa propriedade e tente novamente.", path);
+
+    Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+    return handleExceptionInternal(rootCause, problem, headers, status, request);
+  }
+
+  private String joinPath(List<Reference> path) {
+    return path.stream().map(reference -> reference.getFieldName()).collect(
+        Collectors.joining("."));
+  }
+
   private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-    String path = ex.getPath().stream().map(reference -> reference.getFieldName()).collect(
-        Collectors.joining("."));
+    String path = joinPath(ex.getPath());
 
     String detail = String.format(
         "A propriedade '%s' recebeu o valor '%s', que é um tipo inválido. Corrija e informe um valor compátivel com o tipo '%s'. ",
