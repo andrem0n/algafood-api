@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {
-//test
+
   @Autowired
   private CidadeRepository cidadeRepository;
 
