@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,7 @@ public class RestauranteController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
+  public ResponseEntity<?> salvar(@RequestBody @Valid Restaurante restaurante) {
     try {
       restaurante = cadastroRestauranteService.salvar(restaurante);
       return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
