@@ -5,6 +5,7 @@ import com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroCozinhaService;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class CozinhaController {
   }
 
   @PostMapping
-  public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha cozinha) {
+  public ResponseEntity<Cozinha> adicionar(@RequestBody @Valid Cozinha cozinha) {
     return ResponseEntity.status(HttpStatus.CREATED).body(cadastroCozinha.salvar(cozinha));
   }
 
