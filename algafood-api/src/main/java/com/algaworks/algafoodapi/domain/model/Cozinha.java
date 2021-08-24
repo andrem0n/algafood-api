@@ -1,7 +1,6 @@
 package com.algaworks.algafoodapi.domain.model;
 
-import com.algaworks.algafoodapi.Groups;
-import com.algaworks.algafoodapi.Groups.CadastroRestaurante;
+import com.algaworks.algafoodapi.Groups.CozinhaId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.aspectj.weaver.GeneratedReferenceTypeDelegate;
 
 @JsonRootName("cozinha")
 @Data
@@ -28,8 +26,8 @@ import org.aspectj.weaver.GeneratedReferenceTypeDelegate;
 @AllArgsConstructor
 public class Cozinha {
 
-  
-  @NotNull(groups = Groups.CadastroRestaurante.class)
+
+  @NotNull(groups = CozinhaId.class)
   @EqualsAndHashCode.Include
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

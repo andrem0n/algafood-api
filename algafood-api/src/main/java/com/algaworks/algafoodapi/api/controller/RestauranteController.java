@@ -1,7 +1,5 @@
 package com.algaworks.algafoodapi.api.controller;
 
-import com.algaworks.algafoodapi.Groups;
-import com.algaworks.algafoodapi.Groups.CadastroRestaurante;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.model.Restaurante;
 import com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
@@ -22,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -57,7 +54,7 @@ public class RestauranteController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<?> salvar(
-      @RequestBody @Validated(Groups.CadastroRestaurante.class) Restaurante restaurante) {
+      @RequestBody @Valid Restaurante restaurante) {
     try {
       restaurante = cadastroRestauranteService.salvar(restaurante);
       return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
