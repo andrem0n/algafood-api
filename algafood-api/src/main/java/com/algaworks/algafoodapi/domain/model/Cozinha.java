@@ -28,7 +28,7 @@ import org.aspectj.weaver.GeneratedReferenceTypeDelegate;
 @AllArgsConstructor
 public class Cozinha {
 
-  //teste
+  
   @NotNull(groups = Groups.CadastroRestaurante.class)
   @EqualsAndHashCode.Include
   @Id
