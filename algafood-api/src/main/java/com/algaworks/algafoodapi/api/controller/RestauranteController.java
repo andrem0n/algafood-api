@@ -64,7 +64,7 @@ public class RestauranteController {
   }
 
   @PutMapping("/{id}")
-  public Object atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+  public Object atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante) {
     return cadastroRestauranteService.atualizar(id, restaurante);
   }
 
