@@ -1,7 +1,7 @@
 package com.algaworks.algafoodapi.domain.model;
 
-import com.algaworks.algafoodapi.Groups;
-import com.algaworks.algafoodapi.Groups.CozinhaId;
+import com.algaworks.algafoodapi.core.validation.Groups;
+import com.algaworks.algafoodapi.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -46,7 +46,8 @@ public class Restaurante {
   private String nome;
 
   @NotNull
-  @PositiveOrZero
+  //@PositiveOrZero
+  @TaxaFrete
   @Column(name = "taxa_frete", nullable = false)
   private BigDecimal taxaFrete;
 

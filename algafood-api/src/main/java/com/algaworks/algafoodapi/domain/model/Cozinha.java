@@ -1,6 +1,6 @@
 package com.algaworks.algafoodapi.domain.model;
 
-import com.algaworks.algafoodapi.Groups.CozinhaId;
+import com.algaworks.algafoodapi.core.validation.Groups.CozinhaId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import java.util.ArrayList;

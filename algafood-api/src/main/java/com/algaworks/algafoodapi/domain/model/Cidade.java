@@ -1,6 +1,6 @@
 package com.algaworks.algafoodapi.domain.model;
 
-import com.algaworks.algafoodapi.Groups;
+import com.algaworks.algafoodapi.core.validation.Groups;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
