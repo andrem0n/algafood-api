@@ -11,11 +11,11 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = { })
+@Constraint(validatedBy = { MultiploValidator.class })
 public @interface Multiplo {
 
     @OverridesAttribute(constraint = PositiveOrZero.class, name = "message")
-    String message() default "{TaxaFrete.invalida}";
+    String message() default "Múltiplo Inválido";
 
     Class<?>[] groups() default {};
 
