@@ -1,5 +1,6 @@
 package com.algaworks.algafoodapi.api.exceptionhandler;
 
+import com.algaworks.algafoodapi.api.exceptionhandler.Problem.Object;
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
@@ -82,7 +83,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<Object> handleUncaught(Exception exception, WebRequest webRequest) {
+  public ResponseEntity<java.lang.Object> handleUncaught(Exception exception, WebRequest webRequest) {
 
     HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
     String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
@@ -97,7 +98,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+  protected ResponseEntity<java.lang.Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
     Throwable rootCause = ExceptionUtils.getRootCause(ex);
 
@@ -118,7 +119,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(ex, problem, headers, status, request);
   }
 
-  private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException rootCause,
+  private ResponseEntity<java.lang.Object> handlePropertyBinding(PropertyBindingException rootCause,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
 
     ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
@@ -135,7 +136,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleTypeMismatch(
+  protected ResponseEntity<java.lang.Object> handleTypeMismatch(
       TypeMismatchException exception, HttpHeaders httpHeaders, HttpStatus httpStatus,
       WebRequest webRequest) {
 
@@ -146,7 +147,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     return super.handleTypeMismatch(exception, httpHeaders, httpStatus, webRequest);
   }
 
-  private ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+  private ResponseEntity<java.lang.Object> handleMethodArgumentTypeMismatch(
       MethodArgumentTypeMismatchException exception, HttpHeaders httpHeaders, HttpStatus httpStatus,
       WebRequest webRequest) {
 
@@ -163,7 +164,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(
+  protected ResponseEntity<java.lang.Object> handleMethodArgumentNotValid(
       MethodArgumentNotValidException exception, HttpHeaders httpHeaders, HttpStatus httpStatus,
       WebRequest webRequest) {
 
@@ -173,7 +174,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     BindingResult bindingResult = exception.getBindingResult();
 
-    List<Problem.Field> fields = bindingResult.getAllErrors().stream()
+    List<Problem.Object> objects = bindingResult.getAllErrors().stream()
         .map(objectError -> {
 
           String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
@@ -183,7 +184,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
           if (objectError instanceof FieldError) {
             name = ((FieldError) objectError).getField();
           }
-          return Problem.Field.builder()
+          return Object.builder()
               .name(name)
               .userMessage(message)
               .build();
@@ -192,13 +193,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     Problem problem = createProblemBuilder(httpStatus, problemType, detail)
         .userMessage(
             "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.")
-        .fields(fields)
+        .objects(objects)
         .build();
 
     return handleExceptionInternal(exception, problem, httpHeaders, httpStatus, webRequest);
   }
 
-  private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException ex,
+  private ResponseEntity<java.lang.Object> handleInvalidFormat(InvalidFormatException ex,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
 
     String path = joinPath(ex.getPath());
@@ -216,7 +217,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
+  protected ResponseEntity<java.lang.Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
       HttpHeaders headers, HttpStatus httpStatus, WebRequest webRequest) {
 
     String detail = String
@@ -231,7 +232,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
+  protected ResponseEntity<java.lang.Object> handleExceptionInternal(Exception ex, java.lang.Object body,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
 
     if (Objects.isNull(body)) {
