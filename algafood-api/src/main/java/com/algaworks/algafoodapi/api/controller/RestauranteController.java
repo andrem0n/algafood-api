@@ -1,5 +1,6 @@
 package com.algaworks.algafoodapi.api.controller;
 
+import com.algaworks.algafoodapi.core.validation.ValidacaoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.model.Restaurante;
 import com.algaworks.algafoodapi.domain.repository.RestauranteRepository;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -40,6 +44,9 @@ public class RestauranteController {
 
   @Autowired
   private CadastroRestauranteService cadastroRestauranteService;
+
+  @Autowired
+  private SmartValidator smartValidator;
 
   @GetMapping
   public List<Restaurante> listar() {
@@ -78,11 +85,24 @@ public class RestauranteController {
   public Object atualizarParcial(@PathVariable Long id,
       @RequestBody Map<String, Object> campos, HttpServletRequest httpServletRequest) {
 
-    Restaurante restauranteSalvo = cadastroRestauranteService.buscarOuFalhar(id);
+    Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
 
-    merge(campos, restauranteSalvo, httpServletRequest);
+    merge(campos, restauranteAtual, httpServletRequest);
 
-    return atualizar(id, restauranteSalvo);
+    validate(restauranteAtual, "restaurante");
+
+    return atualizar(id, restauranteAtual);
+  }
+
+  private void validate(Restaurante restaurante, String objectName) {
+    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante,
+        objectName);
+
+    smartValidator.validate(restaurante, bindingResult);
+
+    if (bindingResult.hasErrors()) {
+      throw new ValidacaoException(bindingResult);
+    }
   }
 
   private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino,
