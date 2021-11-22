@@ -1,6 +1,7 @@
 package com.algaworks.algafoodapi.api.exceptionhandler;
 
 import com.algaworks.algafoodapi.api.exceptionhandler.Problem.Object;
+import com.algaworks.algafoodapi.core.validation.ValidacaoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
@@ -166,6 +167,42 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   @Override
   protected ResponseEntity<java.lang.Object> handleMethodArgumentNotValid(
       MethodArgumentNotValidException exception, HttpHeaders httpHeaders, HttpStatus httpStatus,
+      WebRequest webRequest) {
+
+    String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+
+    ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+
+    BindingResult bindingResult = exception.getBindingResult();
+
+    List<Problem.Object> objects = bindingResult.getAllErrors().stream()
+        .map(objectError -> {
+
+          String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+
+          String name = null;
+
+          if (objectError instanceof FieldError) {
+            name = ((FieldError) objectError).getField();
+          }
+          return Object.builder()
+              .name(name)
+              .userMessage(message)
+              .build();
+        }).collect(Collectors.toList());
+
+    Problem problem = createProblemBuilder(httpStatus, problemType, detail)
+        .userMessage(
+            "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.")
+        .objects(objects)
+        .build();
+
+    return handleExceptionInternal(exception, problem, httpHeaders, httpStatus, webRequest);
+  }
+
+
+  protected ResponseEntity<java.lang.Object> handleValidacaoException(
+      ValidacaoException exception, HttpHeaders httpHeaders, HttpStatus httpStatus,
       WebRequest webRequest) {
 
     String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
