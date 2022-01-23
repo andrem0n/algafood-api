@@ -2,6 +2,8 @@ package com.algaworks.algafoodapi.domain.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import com.algaworks.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
+import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.model.Cozinha;
 import com.algaworks.algafoodapi.domain.repository.CozinhaRepository;
 import javax.validation.ConstraintViolationException;
@@ -10,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -46,11 +50,13 @@ public class CadastroCozinhaIntegrationTests {
     cadastroCozinhaService.salvar(cozinha);
   }
 
-  @Test
-  public void excluir() {
+  @Test(expected = EntidadeEmUsoException.class)
+  public void deveFalharAoExcluirUmaCozinhaEmUso() {
+    cadastroCozinhaService.excluir(1L);
   }
 
-  @Test
-  public void buscarOuFalhar() {
+  @Test(expected = CozinhaNaoEncontradaException.class)
+  public void deveFalharQuandoExcluirCozinhaInexistente() {
+    cadastroCozinhaService.excluir(50L);
   }
 }
