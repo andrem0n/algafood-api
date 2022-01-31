@@ -8,6 +8,7 @@ import com.algaworks.algafoodapi.domain.model.Cozinha;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import javax.validation.ConstraintViolationException;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,14 +73,30 @@ public class CadastroCozinhaIT {
 
     RestAssured
         .given()
-          .basePath("/cozinhas")
-          .port(port)
-          .accept(ContentType.JSON)
+        .basePath("/cozinhas")
+        .port(port)
+        .accept(ContentType.JSON)
         .when()
-          .get()
+        .get()
         .then()
-          .statusCode(200);
+        .statusCode(200);
+  }
 
+  @Test
+  public void devereConter4Cozinhas_QuandoConsultarCozinhas() {
 
+    RestAssured
+        .enableLoggingOfRequestAndResponseIfValidationFails();
+
+    RestAssured
+        .given()
+        .basePath("/cozinhas")
+        .port(port)
+        .accept(ContentType.JSON)
+        .when()
+        .get()
+        .then()
+        .body("", Matchers.hasSize(4))
+        .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
   }
 }
