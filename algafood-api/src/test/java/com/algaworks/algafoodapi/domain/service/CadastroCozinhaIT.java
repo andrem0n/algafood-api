@@ -6,6 +6,7 @@ import com.algaworks.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafoodapi.domain.model.Cozinha;
 import io.restassured.RestAssured;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 import javax.validation.ConstraintViolationException;
 import org.hamcrest.Matchers;
@@ -30,7 +31,10 @@ public class CadastroCozinhaIT {
 
   @Before
   public void setUp() throws Exception {
-
+    RestAssured
+        .enableLoggingOfRequestAndResponseIfValidationFails();
+    RestAssured.port = port;
+    RestAssured.basePath = "/cozinhas";
   }
 
   @Test
@@ -69,12 +73,7 @@ public class CadastroCozinhaIT {
   public void deveretornarStatus200_QuandoConsultarCozinhas() {
 
     RestAssured
-        .enableLoggingOfRequestAndResponseIfValidationFails();
-
-    RestAssured
         .given()
-        .basePath("/cozinhas")
-        .port(port)
         .accept(ContentType.JSON)
         .when()
         .get()
@@ -86,12 +85,7 @@ public class CadastroCozinhaIT {
   public void devereConter4Cozinhas_QuandoConsultarCozinhas() {
 
     RestAssured
-        .enableLoggingOfRequestAndResponseIfValidationFails();
-
-    RestAssured
         .given()
-        .basePath("/cozinhas")
-        .port(port)
         .accept(ContentType.JSON)
         .when()
         .get()
